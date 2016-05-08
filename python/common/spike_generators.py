@@ -81,7 +81,7 @@ class HomogeneousPoissonGeneratorWithRefractory(object):
 
 class PoissonGeneratorWithVariableRate(object):
 
-    def __init__(self, rate_fn, max_rate):
+    def __init__(self, max_rate, rate_fn):
         self.rate_fn = rate_fn
         self.max_rate = max_rate
 

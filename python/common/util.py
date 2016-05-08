@@ -16,7 +16,6 @@ def plot_spikes(spikes, figsize=(200, 1), title='Spike Train'):
     plt.figure(figsize=figsize)
     plt.vlines(spikes.spikes, 0, 1)
     plt.title(title, loc='left')
-    plt.show()
 
 
 def plot_interspike_interval_histogram(spikes, min_time=1, max_time=100,
@@ -26,3 +25,11 @@ def plot_interspike_interval_histogram(spikes, min_time=1, max_time=100,
     plt.figure(figsize=figsize)
     plt.bar(x, y, width=1, bottom=0)
     plt.title(title, loc='left')
+
+
+def plot_autocorrelation_histogram(spikes, bin_size, bin_count, figsize=None, title='Autocorrelation histogram'):
+    x, y = spikes.autocorrelation(bin_size, bin_count)
+    plt.figure(figsize=figsize)
+    plt.bar(x, y, width=1, bottom=0)
+    plt.title(title, loc='left')
+    plt.xlabel('time (ms)')

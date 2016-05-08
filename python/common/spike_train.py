@@ -9,7 +9,7 @@ class SpikeTrain(object):
     def __init__(self, spikes, duration):
         """
         Initialize a spike train
-        :param spikes: array of times of occurrences of spikes
+        :param spikes: array of times of occurrences of spikes, in seconds
         :param duration: duration of this train, in seconds
         """
         self.spikes = spikes
@@ -60,10 +60,20 @@ class SpikeTrain(object):
         intervals = self.interspike_intervals()
         return np.diff([np.count_nonzero(intervals < (t / 1000.)) for t in [0] + list(bins)]) / float(intervals.size)
 
-    def autocorrelation_histogram(self, bins):
+    def autocorrelation(self, bin_size, bin_count):
         """
 
-        :param bins: margins of the bins, in milliseconds
-        :return:
+        :param bin_size: int, size of a bin in the histogram, in seconds
+        :param bin_count: int, number of bins
+        :return: x, y
         """
-        pass
+        # page 28 textbook
+        vals = [0] * bin_count
+        for t1 in self.spikes:
+            for t2 in self.spikes:
+                m = int(np.floor(np.abs(t1 - t2) / bin_size))
+                if m < bin_count:
+                    vals[m] += 1
+        v = (np.asarray(vals, dtype=np.float) / self.duration)
+        v -= (len(self.spikes) * len(self.spikes) * bin_size) / (self.duration * self.duration)
+        return np.arange(0, bin_count) * int(bin_size * 1000), v
