@@ -91,4 +91,9 @@ class PoissonGeneratorWithVariableRate(object):
         :param duration:
         :return:
         """
-        return SpikeTrain(poisson_time_dependent_rate(duration, lambda x, y: self.rate_fn(x), self.max_rate), duration)
+        def r_wrapper(x, y):
+            if self.rate_fn.func_code.co_argcount == 2:
+                return self.rate_fn(x, y)
+            return self.rate_fn(x)
+
+        return SpikeTrain(poisson_time_dependent_rate(duration, r_wrapper, self.max_rate), duration)
